@@ -124,7 +124,7 @@ export default function Home() {
     setLeaderboardStatus("loading");
     try {
       const response = await fetch(
-        `${SUPABASE_URL}/rest/v1/color_dash_scores?select=id,player_name,score&order=score.desc,created_at.asc&limit=5`,
+        `${SUPABASE_URL}/rest/v1/color_dash_scores?select=id,player_name,score&order=score.desc,created_at.asc&limit=20`,
         {
           headers: leaderboardHeaders(),
           cache: "no-store",
@@ -478,7 +478,7 @@ export default function Home() {
             {status === "ready" && (
               <section className="leaderboard" aria-labelledby="leaderboard-title">
                 <div className="leaderboard-heading">
-                  <span id="leaderboard-title">GLOBAL TOP 5</span>
+                  <span id="leaderboard-title">GLOBAL TOP 20</span>
                 </div>
                 {leaderboardStatus === "loading" && (
                   <p className="leaderboard-message">Loading best scores…</p>

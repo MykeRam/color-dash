@@ -35,7 +35,7 @@ test("server-renders the Color Dash start screen", async () => {
   );
   assert.match(html, /COLOR DASH/);
   assert.match(html, /Think fast/);
-  assert.match(html, /GLOBAL TOP 5/);
+  assert.match(html, /GLOBAL TOP 20/);
   assert.match(html, /aria-label="Start Color Dash"/);
   assert.match(html, /START HERE/);
   assert.match(html, /Tap GO to start/);

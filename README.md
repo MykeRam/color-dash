@@ -25,7 +25,7 @@ Open `http://localhost:3000`.
 - Three lives per run
 - Increasing difficulty as the score rises
 - Best score saved locally in the browser
-- Global top-five leaderboard shared across every player
+- Global top-20 leaderboard shared across every player
 - One leaderboard entry per browser player, updated only by a new personal best
 - Responsive layouts for mobile and desktop
 
