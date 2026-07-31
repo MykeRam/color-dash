@@ -167,11 +167,21 @@ export default function Home() {
   }, []);
 
   useEffect(() => {
-    const frame = window.requestAnimationFrame(() => {
+    const refreshScores = () => {
       void loadLeaderboard();
       void loadPlayerBest();
-    });
-    return () => window.cancelAnimationFrame(frame);
+    };
+    const refreshVisibleScores = () => {
+      if (!document.hidden) refreshScores();
+    };
+    const frame = window.requestAnimationFrame(refreshScores);
+    window.addEventListener("focus", refreshScores);
+    document.addEventListener("visibilitychange", refreshVisibleScores);
+    return () => {
+      window.cancelAnimationFrame(frame);
+      window.removeEventListener("focus", refreshScores);
+      document.removeEventListener("visibilitychange", refreshVisibleScores);
+    };
   }, [loadLeaderboard, loadPlayerBest]);
 
   const endGame = useCallback(() => {
@@ -329,6 +339,8 @@ export default function Home() {
   const canImprovePlayerBest = playerBest === null || score > playerBest;
   const nameIsBlocked =
     playerName.trim().length > 0 && hasBlockedName(playerName);
+  const globalBest =
+    leaderboard[0]?.score ?? (leaderboardStatus === "ready" ? 0 : null);
   const heroIcon = (
     <>
       <span />
@@ -369,9 +381,9 @@ export default function Home() {
               <span>COLOR DASH</span>
             </div>
           )}
-          <div className="best-score">
-            <span>BEST</span>
-            <strong>{best}</strong>
+          <div className="best-score" aria-live="polite">
+            <span>GLOBAL BEST</span>
+            <strong>{globalBest ?? "—"}</strong>
           </div>
         </header>
 

@@ -34,6 +34,7 @@ test("server-renders the Color Dash start screen", async () => {
     /<meta[^>]+name="theme-color"[^>]+content="#0a1b2e"/i,
   );
   assert.match(html, /COLOR DASH/);
+  assert.match(html, /GLOBAL BEST/);
   assert.match(html, /Think fast/);
   assert.match(html, /GLOBAL TOP 20/);
   assert.match(html, /aria-label="Start Color Dash"/);
