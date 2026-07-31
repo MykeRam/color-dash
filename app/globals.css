@@ -256,10 +256,10 @@ button {
   position: relative;
   z-index: 2;
   display: grid;
-  width: 58px;
-  height: 58px;
+  width: 72px;
+  height: 72px;
   place-items: center;
-  border-radius: 18px;
+  border-radius: 50%;
   background: var(--game-cycle-color);
   color: #062435;
   font-size: 1rem;
@@ -848,9 +848,9 @@ h1 em {
   }
 
   .ready-screen .hero-orbits strong {
-    width: 42px;
-    height: 42px;
-    border-radius: 13px;
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
     font-size: 0.72rem;
   }
 
