@@ -437,15 +437,19 @@ h1 em {
 }
 
 .creator-credit a {
-  color: #b7d8e8;
+  color: var(--game-cycle-color);
   font-weight: 800;
   text-decoration: none;
   transition: color 140ms ease;
 }
 
+.game-card:has(.creator-credit a:hover),
+.game-card:has(.creator-credit a:focus-visible) {
+  animation-play-state: paused;
+}
+
 .creator-credit a:hover,
 .creator-credit a:focus-visible {
-  color: var(--game-cycle-color);
   text-shadow: 0 0 9px currentColor;
 }
 
