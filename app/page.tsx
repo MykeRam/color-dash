@@ -335,14 +335,30 @@ export default function Home() {
 
       <section className="game-card" aria-label="Color Dash game">
         <header className="topbar">
-          <div className="brand">
-            <span className="brand-mark" aria-hidden="true">
-              <i />
-              <i />
-              <i />
-            </span>
-            <span>COLOR DASH</span>
-          </div>
+          {status === "over" ? (
+            <button
+              type="button"
+              className="brand brand-home"
+              onClick={() => setStatus("ready")}
+              aria-label="Return to the Color Dash home screen"
+            >
+              <span className="brand-mark" aria-hidden="true">
+                <i />
+                <i />
+                <i />
+              </span>
+              <span>COLOR DASH</span>
+            </button>
+          ) : (
+            <div className="brand">
+              <span className="brand-mark" aria-hidden="true">
+                <i />
+                <i />
+                <i />
+              </span>
+              <span>COLOR DASH</span>
+            </div>
+          )}
           <div className="best-score">
             <span>BEST</span>
             <strong>{best}</strong>

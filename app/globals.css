@@ -75,6 +75,20 @@ button {
   letter-spacing: 0.15em;
 }
 
+.brand-home {
+  padding: 0;
+  border: 0;
+  outline-offset: 6px;
+  background: transparent;
+  color: inherit;
+  cursor: pointer;
+}
+
+.brand-home:hover,
+.brand-home:focus-visible {
+  color: var(--accent);
+}
+
 .brand-mark {
   display: flex;
   gap: 2px;
