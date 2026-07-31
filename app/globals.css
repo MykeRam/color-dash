@@ -204,7 +204,7 @@ button {
 }
 
 .start-cue b {
-  margin: 2px 0 0 -5px;
+  margin: 10px 0 0 -5px;
   font-size: 1.45rem;
   line-height: 1;
   animation: cue-point 650ms ease-in-out infinite alternate;
