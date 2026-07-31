@@ -537,6 +537,10 @@ h1 em {
   box-shadow: 0 0 0 3px rgba(98, 233, 255, 0.09);
 }
 
+.score-form input[aria-invalid="true"] {
+  border-color: rgba(255, 156, 138, 0.75);
+}
+
 .score-form input::placeholder {
   color: #6f8496;
 }

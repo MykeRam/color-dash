@@ -2,6 +2,7 @@
 
 import { createClient, type SupabaseClient } from "@supabase/supabase-js";
 import { useCallback, useEffect, useRef, useState } from "react";
+import { hasBlockedName } from "@/lib/name-filter";
 
 type ColorOption = {
   name: string;
@@ -86,7 +87,7 @@ export default function Home() {
   const [playerBest, setPlayerBest] = useState<number | null>(null);
   const [playerName, setPlayerName] = useState("");
   const [submitStatus, setSubmitStatus] = useState<
-    "idle" | "saving" | "saved" | "not-improved" | "error"
+    "idle" | "saving" | "saved" | "not-improved" | "blocked-name" | "error"
   >("idle");
   const deadlineRef = useRef(0);
   const scoreRef = useRef(0);
@@ -252,6 +253,11 @@ export default function Home() {
       return;
     }
 
+    if (hasBlockedName(cleanName)) {
+      setSubmitStatus("blocked-name");
+      return;
+    }
+
     if (playerBest !== null && score <= playerBest) {
       setSubmitStatus("not-improved");
       return;
@@ -319,6 +325,8 @@ export default function Home() {
   const pointsNeeded =
     playerBest === null ? 0 : Math.max(0, playerBest - score + 1);
   const canImprovePlayerBest = playerBest === null || score > playerBest;
+  const nameIsBlocked =
+    playerName.trim().length > 0 && hasBlockedName(playerName);
   const heroIcon = (
     <>
       <span />
@@ -524,7 +532,8 @@ export default function Home() {
                         setPlayerName(event.target.value);
                         if (
                           submitStatus === "error" ||
-                          submitStatus === "not-improved"
+                          submitStatus === "not-improved" ||
+                          submitStatus === "blocked-name"
                         ) {
                           setSubmitStatus("idle");
                         }
@@ -532,6 +541,8 @@ export default function Home() {
                       maxLength={18}
                       placeholder="Your name"
                       autoComplete="nickname"
+                      aria-describedby="player-name-help"
+                      aria-invalid={nameIsBlocked}
                       disabled={submitStatus === "saved"}
                     />
                     <button
@@ -541,7 +552,8 @@ export default function Home() {
                         submitStatus === "saved" ||
                         score < 1 ||
                         !LEADERBOARD_READY ||
-                        !canImprovePlayerBest
+                        !canImprovePlayerBest ||
+                        nameIsBlocked
                       }
                     >
                       {submitStatus === "saving"
@@ -554,11 +566,20 @@ export default function Home() {
                     </button>
                   </div>
                   <p
-                    className={submitStatus === "error" ? "score-error" : ""}
+                    id="player-name-help"
+                    className={
+                      submitStatus === "error" ||
+                      submitStatus === "blocked-name" ||
+                      nameIsBlocked
+                        ? "score-error"
+                        : ""
+                    }
                     role="status"
                   >
                     {submitStatus === "saved"
                       ? "New personal best — your leaderboard score is updated."
+                      : submitStatus === "blocked-name" || nameIsBlocked
+                        ? "Please choose a different name."
                       : submitStatus === "error"
                         ? "Couldn’t save your score. Please try again."
                         : score < 1
