@@ -1,5 +1,6 @@
 "use client";
 
+import { createClient, type SupabaseClient } from "@supabase/supabase-js";
 import { useCallback, useEffect, useRef, useState } from "react";
 
 type ColorOption = {
@@ -12,6 +13,11 @@ type LeaderboardEntry = {
   id: string;
   player_name: string;
   score: number;
+};
+
+type ScoreSubmissionResult = {
+  saved: boolean;
+  best_score: number;
 };
 
 const COLORS: ColorOption[] = [
@@ -28,6 +34,21 @@ const MIN_TIME = 1.15;
 const SUPABASE_URL = process.env.NEXT_PUBLIC_SUPABASE_URL;
 const SUPABASE_KEY = process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY;
 const LEADERBOARD_READY = Boolean(SUPABASE_URL && SUPABASE_KEY);
+let supabaseClient: SupabaseClient | null = null;
+
+function getSupabaseClient() {
+  if (!LEADERBOARD_READY || !SUPABASE_URL || !SUPABASE_KEY) return null;
+  if (!supabaseClient) {
+    supabaseClient = createClient(SUPABASE_URL, SUPABASE_KEY, {
+      auth: {
+        persistSession: true,
+        autoRefreshToken: true,
+        detectSessionInUrl: false,
+      },
+    });
+  }
+  return supabaseClient;
+}
 
 function leaderboardHeaders() {
   return {
@@ -61,9 +82,10 @@ export default function Home() {
   const [leaderboardStatus, setLeaderboardStatus] = useState<
     "loading" | "ready" | "error" | "unavailable"
   >("loading");
+  const [playerBest, setPlayerBest] = useState<number | null>(null);
   const [playerName, setPlayerName] = useState("");
   const [submitStatus, setSubmitStatus] = useState<
-    "idle" | "saving" | "saved" | "error"
+    "idle" | "saving" | "saved" | "not-improved" | "error"
   >("idle");
   const deadlineRef = useRef(0);
   const scoreRef = useRef(0);
@@ -71,9 +93,12 @@ export default function Home() {
   const feedbackTimerRef = useRef<number | null>(null);
 
   useEffect(() => {
-    const saved = Number(window.localStorage.getItem("color-dash-best") ?? 0);
-    setBest(Number.isFinite(saved) ? saved : 0);
-    setPlayerName(window.localStorage.getItem("color-dash-player") ?? "");
+    const frame = window.requestAnimationFrame(() => {
+      const saved = Number(window.localStorage.getItem("color-dash-best") ?? 0);
+      setBest(Number.isFinite(saved) ? saved : 0);
+      setPlayerName(window.localStorage.getItem("color-dash-player") ?? "");
+    });
+    return () => window.cancelAnimationFrame(frame);
   }, []);
 
   const loadLeaderboard = useCallback(async () => {
@@ -100,9 +125,40 @@ export default function Home() {
     }
   }, []);
 
+  const loadPlayerBest = useCallback(async () => {
+    const client = getSupabaseClient();
+    if (!client) return;
+
+    try {
+      const {
+        data: { session },
+        error: sessionError,
+      } = await client.auth.getSession();
+      if (sessionError) throw sessionError;
+      if (!session) {
+        setPlayerBest(null);
+        return;
+      }
+
+      const { data, error } = await client
+        .from("color_dash_scores")
+        .select("score")
+        .eq("user_id", session.user.id)
+        .maybeSingle();
+      if (error) throw error;
+      setPlayerBest(data?.score ?? null);
+    } catch {
+      setPlayerBest(null);
+    }
+  }, []);
+
   useEffect(() => {
-    void loadLeaderboard();
-  }, [loadLeaderboard]);
+    const frame = window.requestAnimationFrame(() => {
+      void loadLeaderboard();
+      void loadPlayerBest();
+    });
+    return () => window.cancelAnimationFrame(frame);
+  }, [loadLeaderboard, loadPlayerBest]);
 
   const endGame = useCallback(() => {
     setStatus("over");
@@ -184,24 +240,44 @@ export default function Home() {
       return;
     }
 
+    if (playerBest !== null && score <= playerBest) {
+      setSubmitStatus("not-improved");
+      return;
+    }
+
     setSubmitStatus("saving");
     try {
-      const response = await fetch(`${SUPABASE_URL}/rest/v1/color_dash_scores`, {
-        method: "POST",
-        headers: {
-          ...leaderboardHeaders(),
-          Prefer: "return=minimal",
-        },
-        body: JSON.stringify({
-          player_name: cleanName,
-          score,
-        }),
-      });
-      if (!response.ok) throw new Error("Score submission failed");
+      const client = getSupabaseClient();
+      if (!client) throw new Error("Leaderboard unavailable");
+
+      const {
+        data: { session: existingSession },
+        error: sessionError,
+      } = await client.auth.getSession();
+      if (sessionError) throw sessionError;
+
+      let session = existingSession;
+      if (!session) {
+        const { data, error } = await client.auth.signInAnonymously();
+        if (error || !data.session) {
+          throw error ?? new Error("Could not create a player session");
+        }
+        session = data.session;
+      }
+
+      const { data, error } = await client
+        .rpc("submit_color_dash_score", {
+          p_player_name: cleanName,
+          p_score: score,
+        })
+        .single<ScoreSubmissionResult>();
+      if (error || !data) throw error ?? new Error("Score submission failed");
+
       window.localStorage.setItem("color-dash-player", cleanName);
       setPlayerName(cleanName);
-      setSubmitStatus("saved");
-      await loadLeaderboard();
+      setPlayerBest(data.best_score);
+      setSubmitStatus(data.saved ? "saved" : "not-improved");
+      if (data.saved) await loadLeaderboard();
     } catch {
       setSubmitStatus("error");
     }
@@ -228,6 +304,9 @@ export default function Home() {
   };
 
   const progress = Math.max(0, Math.min(100, (timeLeft / roundTime) * 100));
+  const pointsNeeded =
+    playerBest === null ? 0 : Math.max(0, playerBest - score + 1);
+  const canImprovePlayerBest = playerBest === null || score > playerBest;
   const heroIcon = (
     <>
       <span />
@@ -400,14 +479,23 @@ export default function Home() {
                   </div>
                 </div>
                 <form className="score-form" onSubmit={saveScore}>
-                  <label htmlFor="player-name">SAVE TO GLOBAL BOARD</label>
+                  <label htmlFor="player-name">
+                    {playerBest === null
+                      ? "SAVE TO GLOBAL BOARD"
+                      : `LEADERBOARD BEST · ${playerBest}`}
+                  </label>
                   <div>
                     <input
                       id="player-name"
                       value={playerName}
                       onChange={(event) => {
                         setPlayerName(event.target.value);
-                        if (submitStatus === "error") setSubmitStatus("idle");
+                        if (
+                          submitStatus === "error" ||
+                          submitStatus === "not-improved"
+                        ) {
+                          setSubmitStatus("idle");
+                        }
                       }}
                       maxLength={18}
                       placeholder="Your name"
@@ -420,13 +508,16 @@ export default function Home() {
                         submitStatus === "saving" ||
                         submitStatus === "saved" ||
                         score < 1 ||
-                        !LEADERBOARD_READY
+                        !LEADERBOARD_READY ||
+                        !canImprovePlayerBest
                       }
                     >
                       {submitStatus === "saving"
                         ? "SAVING…"
                         : submitStatus === "saved"
-                          ? "SAVED ✓"
+                          ? "UPDATED ✓"
+                          : !canImprovePlayerBest && playerBest !== null
+                            ? `BEAT ${playerBest}`
                           : "SAVE"}
                     </button>
                   </div>
@@ -435,12 +526,18 @@ export default function Home() {
                     role="status"
                   >
                     {submitStatus === "saved"
-                      ? "You’re on the global leaderboard."
+                      ? "New personal best — your leaderboard score is updated."
                       : submitStatus === "error"
-                        ? "Enter a name and try again."
+                        ? "Couldn’t save your score. Please try again."
                         : score < 1
                           ? "Score a point to join the board."
-                          : "Names are limited to 18 characters."}
+                          : !canImprovePlayerBest
+                            ? `You need ${pointsNeeded} more ${
+                                pointsNeeded === 1 ? "point" : "points"
+                              } to update your score.`
+                            : playerBest === null
+                              ? "Your first saved score starts your personal best."
+                              : `Beat ${playerBest} to update your leaderboard score.`}
                   </p>
                 </form>
               </>
