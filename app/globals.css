@@ -360,22 +360,6 @@ h1 em {
   letter-spacing: 0.14em;
 }
 
-.leaderboard-heading span:last-child {
-  color: #4ee6a8;
-  font-size: 0.52rem;
-}
-
-.leaderboard-heading span:last-child::before {
-  display: inline-block;
-  width: 5px;
-  height: 5px;
-  margin-right: 5px;
-  border-radius: 50%;
-  background: currentColor;
-  content: "";
-  box-shadow: 0 0 8px currentColor;
-}
-
 .leaderboard ol {
   margin: 0;
   padding: 0;

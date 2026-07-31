@@ -348,7 +348,6 @@ export default function Home() {
               <section className="leaderboard" aria-labelledby="leaderboard-title">
                 <div className="leaderboard-heading">
                   <span id="leaderboard-title">GLOBAL TOP 5</span>
-                  <span>LIVE</span>
                 </div>
                 {leaderboardStatus === "loading" && (
                   <p className="leaderboard-message">Loading best scores…</p>
