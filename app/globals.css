@@ -40,18 +40,6 @@ button {
   touch-action: manipulation;
 }
 
-.game-shell::before {
-  position: absolute;
-  inset: 0;
-  background: radial-gradient(
-    circle at center,
-    rgba(255, 255, 255, 0.025),
-    transparent 55%
-  );
-  content: "";
-  pointer-events: none;
-}
-
 .ambient {
   display: none;
 }
@@ -741,10 +729,6 @@ h1 em {
   .game-shell {
     padding: 0;
     background: #0a1b2e;
-  }
-
-  .game-shell::before {
-    display: none;
   }
 
   .game-card {
