@@ -75,6 +75,7 @@ export default function Home() {
   const [target, setTarget] = useState(options[0]);
   const [score, setScore] = useState(0);
   const [best, setBest] = useState(0);
+  const [bestAtRunStart, setBestAtRunStart] = useState(0);
   const [streak, setStreak] = useState(0);
   const [lives, setLives] = useState(3);
   const [timeLeft, setTimeLeft] = useState(START_TIME);
@@ -234,6 +235,7 @@ export default function Home() {
   const startGame = () => {
     scoreRef.current = 0;
     livesRef.current = 3;
+    setBestAtRunStart(best);
     setScore(0);
     setStreak(0);
     setLives(3);
@@ -451,9 +453,15 @@ export default function Home() {
             {status === "over" && <p className="eyebrow">TIME’S UP</p>}
             <h1>
               {status === "over" ? (
-                <>
-                  Nice <em>dash.</em>
-                </>
+                score > bestAtRunStart ? (
+                  <>
+                    Nice <em>dash.</em>
+                  </>
+                ) : (
+                  <>
+                    You can do <em>better!</em>
+                  </>
+                )
               ) : (
                 <>
                   Think fast.
