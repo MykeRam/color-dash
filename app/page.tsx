@@ -9,12 +9,12 @@ type ColorOption = {
 };
 
 const COLORS: ColorOption[] = [
-  { name: "Coral", value: "#ff6b6b", ink: "#311111" },
-  { name: "Sunny", value: "#ffd166", ink: "#302200" },
-  { name: "Mint", value: "#52d6a5", ink: "#062b20" },
-  { name: "Sky", value: "#59b8ff", ink: "#082238" },
-  { name: "Violet", value: "#a78bfa", ink: "#1f1640" },
-  { name: "Pink", value: "#f783c5", ink: "#3a102a" },
+  { name: "Flame", value: "#ff7657", ink: "#35120b" },
+  { name: "Lemon", value: "#ffe45c", ink: "#302600" },
+  { name: "Emerald", value: "#4ee6a8", ink: "#052d20" },
+  { name: "Cyan", value: "#45d8ff", ink: "#052a35" },
+  { name: "Indigo", value: "#7f8cff", ink: "#11163d" },
+  { name: "Magenta", value: "#ff70c7", ink: "#3c0c2a" },
 ];
 
 const START_TIME = 3.5;

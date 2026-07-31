@@ -1,10 +1,10 @@
 @import "tailwindcss";
 
 :root {
-  --ink: #f8f6ff;
-  --muted: #aaa6bd;
-  --panel: rgba(27, 24, 41, 0.88);
-  --lime: #d9ff62;
+  --ink: #f4fbff;
+  --muted: #9db1c4;
+  --panel: rgba(10, 27, 46, 0.9);
+  --accent: #62e9ff;
 }
 
 * {
@@ -12,13 +12,13 @@
 }
 
 html {
-  background: #100e18;
+  background: #06111f;
   overscroll-behavior: none;
 }
 
 body {
   margin: 0;
-  background: #100e18;
+  background: #06111f;
   color: var(--ink);
   font-family: Arial, Helvetica, sans-serif;
   -webkit-font-smoothing: antialiased;
@@ -37,8 +37,8 @@ button {
   overflow: hidden;
   padding: 18px;
   background:
-    radial-gradient(circle at 50% -10%, #332854 0, transparent 42%),
-    linear-gradient(145deg, #171321 0%, #0c0b12 100%);
+    radial-gradient(circle at 45% -15%, #174c70 0, transparent 43%),
+    linear-gradient(145deg, #0a2238 0%, #040b13 100%);
   touch-action: manipulation;
 }
 
@@ -55,13 +55,13 @@ button {
 .ambient-one {
   top: -160px;
   left: -100px;
-  background: #8b6bff;
+  background: #21c7ff;
 }
 
 .ambient-two {
   right: -150px;
   bottom: -150px;
-  background: #ff6b9e;
+  background: #ff4fa7;
 }
 
 .game-card {
@@ -103,14 +103,14 @@ button {
   height: 20px;
   padding: 3px;
   border-radius: 6px;
-  background: var(--lime);
+  background: var(--accent);
 }
 
 .brand-mark i {
   width: 3px;
   height: 7px;
   border-radius: 3px;
-  background: #171321;
+  background: #072035;
   transform: rotate(-12deg);
 }
 
@@ -155,7 +155,7 @@ button {
   margin-bottom: 32px;
   place-items: center;
   border-radius: 50%;
-  background: #28233b;
+  background: #102d48;
   box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.06);
 }
 
@@ -186,11 +186,11 @@ button {
   height: 58px;
   place-items: center;
   border-radius: 18px;
-  background: var(--lime);
-  color: #1b2104;
+  background: var(--accent);
+  color: #062435;
   font-size: 1rem;
   transform: rotate(-7deg);
-  box-shadow: 0 10px 30px rgba(217, 255, 98, 0.25);
+  box-shadow: 0 10px 30px rgba(98, 233, 255, 0.26);
 }
 
 .hero-orbits span {
@@ -198,26 +198,26 @@ button {
   z-index: 3;
   width: 18px;
   height: 18px;
-  border: 4px solid #1b1826;
+  border: 4px solid #0a1c2d;
   border-radius: 50%;
 }
 
 .hero-orbits span:nth-child(1) {
   top: 9px;
   left: 26px;
-  background: #ff6b6b;
+  background: #ff7657;
 }
 
 .hero-orbits span:nth-child(2) {
   top: 41px;
   right: 2px;
-  background: #59b8ff;
+  background: #45d8ff;
 }
 
 .hero-orbits span:nth-child(3) {
   right: 25px;
   bottom: 8px;
-  background: #f783c5;
+  background: #ff70c7;
 }
 
 @keyframes spin {
@@ -228,7 +228,7 @@ button {
 
 .eyebrow {
   margin: 0 0 12px;
-  color: var(--lime);
+  color: var(--accent);
   font-size: 0.68rem;
   font-weight: 900;
   letter-spacing: 0.2em;
@@ -242,7 +242,7 @@ h1 {
 }
 
 h1 em {
-  color: var(--lime);
+  color: var(--accent);
   font-family: Georgia, serif;
   font-weight: 400;
 }
@@ -264,13 +264,13 @@ h1 em {
   padding: 8px 9px 8px 24px;
   border: 0;
   border-radius: 20px;
-  background: var(--lime);
-  color: #171b08;
+  background: var(--accent);
+  color: #062435;
   cursor: pointer;
   font-size: 0.79rem;
   font-weight: 900;
   letter-spacing: 0.08em;
-  box-shadow: 0 12px 32px rgba(217, 255, 98, 0.16);
+  box-shadow: 0 12px 32px rgba(98, 233, 255, 0.18);
   transition: transform 140ms ease, box-shadow 140ms ease;
 }
 
@@ -284,8 +284,8 @@ h1 em {
   height: 46px;
   place-items: center;
   border-radius: 15px;
-  background: #171b08;
-  color: var(--lime);
+  background: #062435;
+  color: var(--accent);
   font-size: 1.25rem;
 }
 
@@ -349,7 +349,7 @@ h1 em {
 }
 
 .streak {
-  color: var(--lime);
+  color: var(--accent);
   font-family: Georgia, serif;
   font-size: 0.83rem;
   font-style: italic;
@@ -363,7 +363,7 @@ h1 em {
 }
 
 .lives .live {
-  color: #ff718d;
+  color: #ff70c7;
 }
 
 .timer {
@@ -378,8 +378,8 @@ h1 em {
   display: block;
   height: 100%;
   border-radius: inherit;
-  background: var(--lime);
-  box-shadow: 0 0 14px rgba(217, 255, 98, 0.5);
+  background: var(--accent);
+  box-shadow: 0 0 14px rgba(98, 233, 255, 0.52);
 }
 
 .prompt {
