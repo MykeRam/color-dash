@@ -480,6 +480,10 @@ export default function Home() {
             )}
             {status === "over" && (
               <>
+                <button className="play-button" onClick={startGame}>
+                  <span>PLAY AGAIN</span>
+                  <b aria-hidden="true">→</b>
+                </button>
                 <div className="results">
                   <div>
                     <span>SCORE</span>
@@ -553,12 +557,6 @@ export default function Home() {
                   </p>
                 </form>
               </>
-            )}
-            {status === "over" && (
-              <button className="play-button" onClick={startGame}>
-                <span>PLAY AGAIN</span>
-                <b aria-hidden="true">→</b>
-              </button>
             )}
             <p className="hint">
               {status === "ready"

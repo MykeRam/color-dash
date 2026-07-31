@@ -369,6 +369,10 @@ h1 em {
   font-size: 1.25rem;
 }
 
+.results-screen .play-button {
+  margin-bottom: 16px;
+}
+
 .hint {
   margin: 15px 0 0;
   color: #777387;
