@@ -385,7 +385,9 @@ export default function Home() {
           <div className="best-score" aria-live="polite">
             <span>GLOBAL BEST</span>
             <div className="best-score-leader">
-              <strong>{globalBest ?? "—"}</strong>
+              <strong className={globalBestEntry ? "global-best-glint" : undefined}>
+                {globalBest ?? "—"}
+              </strong>
               {globalBestEntry && (
                 <small title={globalBestEntry.player_name}>
                   {globalBestEntry.player_name}

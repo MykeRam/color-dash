@@ -140,6 +140,46 @@ button {
   letter-spacing: 0;
 }
 
+.global-best-glint {
+  display: inline-block;
+  background-image: linear-gradient(
+    110deg,
+    var(--ink) 0%,
+    var(--ink) 38%,
+    #ffffff 46%,
+    var(--accent) 50%,
+    #ffffff 54%,
+    var(--ink) 62%,
+    var(--ink) 100%
+  );
+  background-position: 100% 50%;
+  background-size: 260% 100%;
+  background-clip: text;
+  transform-origin: center;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: global-best-shine 900ms ease-in-out 3.95s both;
+}
+
+@keyframes global-best-shine {
+  0% {
+    background-position: 100% 50%;
+    text-shadow: none;
+    transform: scale(1);
+  }
+
+  50% {
+    text-shadow: 0 0 12px rgba(98, 233, 255, 0.75);
+    transform: scale(1.04);
+  }
+
+  100% {
+    background-position: 0% 50%;
+    text-shadow: none;
+    transform: scale(1);
+  }
+}
+
 .best-score small {
   max-width: 88px;
   margin-top: 3px;
@@ -1032,5 +1072,13 @@ h1 em {
   .start-cue b {
     opacity: 1;
     animation-delay: 0ms !important;
+  }
+
+  .global-best-glint {
+    background: none;
+    color: var(--ink);
+    transform: none;
+    -webkit-text-fill-color: var(--ink);
+    animation: none !important;
   }
 }
