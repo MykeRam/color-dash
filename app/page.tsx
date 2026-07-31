@@ -256,6 +256,12 @@ export default function Home() {
             <p className="hint">Tap with one thumb · No sign-in needed</p>
           </div>
         )}
+        <footer className="creator-credit">
+          Developed by{" "}
+          <a href="https://myke.nyc" target="_blank" rel="noreferrer">
+            Myke
+          </a>
+        </footer>
       </section>
     </main>
   );

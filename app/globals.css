@@ -60,7 +60,7 @@ button {
   position: relative;
   width: min(100%, 430px);
   min-height: min(760px, calc(100svh - 36px));
-  padding: 24px;
+  padding: 24px 24px 46px;
   overflow: hidden;
   border: 1px solid rgba(255, 255, 255, 0.11);
   border-radius: 32px;
@@ -183,6 +183,7 @@ button {
   font-size: 1rem;
   transform: rotate(-7deg);
   box-shadow: 0 10px 30px rgba(98, 233, 255, 0.26);
+  animation: game-colors 4.8s steps(1, end) infinite;
 }
 
 .hero-orbits span {
@@ -215,6 +216,27 @@ button {
 @keyframes spin {
   to {
     transform: rotate(360deg);
+  }
+}
+
+@keyframes game-colors {
+  0% {
+    background: #ff7657;
+  }
+  16.666% {
+    background: #ffe45c;
+  }
+  33.333% {
+    background: #4ee6a8;
+  }
+  50% {
+    background: #45d8ff;
+  }
+  66.666% {
+    background: #7f8cff;
+  }
+  83.333% {
+    background: #ff70c7;
   }
 }
 
@@ -285,6 +307,27 @@ h1 em {
   margin: 15px 0 0;
   color: #777387;
   font-size: 0.68rem;
+}
+
+.creator-credit {
+  position: absolute;
+  right: 24px;
+  bottom: 18px;
+  color: #75899b;
+  font-size: 0.65rem;
+  letter-spacing: 0.02em;
+}
+
+.creator-credit a {
+  color: #b7d8e8;
+  font-weight: 800;
+  text-decoration: none;
+  transition: color 140ms ease;
+}
+
+.creator-credit a:hover,
+.creator-credit a:focus-visible {
+  color: var(--accent);
 }
 
 .results {
@@ -473,7 +516,7 @@ h1 em {
 @media (max-height: 700px) {
   .game-card {
     min-height: calc(100svh - 20px);
-    padding: 18px;
+    padding: 18px 18px 42px;
     border-radius: 24px;
   }
 
@@ -506,6 +549,11 @@ h1 em {
 
   .color-button {
     min-height: 82px;
+  }
+
+  .creator-credit {
+    right: 18px;
+    bottom: 14px;
   }
 }
 
