@@ -31,6 +31,7 @@ const COLORS: ColorOption[] = [
 
 const START_TIME = 3.5;
 const MIN_TIME = 1.15;
+const BEST_SCORE_RESET_VERSION = "2026-07-30-1";
 const SUPABASE_URL = process.env.NEXT_PUBLIC_SUPABASE_URL;
 const SUPABASE_KEY = process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY;
 const LEADERBOARD_READY = Boolean(SUPABASE_URL && SUPABASE_KEY);
@@ -94,6 +95,17 @@ export default function Home() {
 
   useEffect(() => {
     const frame = window.requestAnimationFrame(() => {
+      const resetVersion = window.localStorage.getItem(
+        "color-dash-best-reset-version",
+      );
+      if (resetVersion !== BEST_SCORE_RESET_VERSION) {
+        window.localStorage.removeItem("color-dash-best");
+        window.localStorage.setItem(
+          "color-dash-best-reset-version",
+          BEST_SCORE_RESET_VERSION,
+        );
+      }
+
       const saved = Number(window.localStorage.getItem("color-dash-best") ?? 0);
       setBest(Number.isFinite(saved) ? saved : 0);
       setPlayerName(window.localStorage.getItem("color-dash-player") ?? "");
