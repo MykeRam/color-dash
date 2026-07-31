@@ -269,6 +269,27 @@ button {
   }
 }
 
+@keyframes footer-game-colors {
+  0% {
+    color: #ff7657;
+  }
+  16.666% {
+    color: #ffe45c;
+  }
+  33.333% {
+    color: #4ee6a8;
+  }
+  50% {
+    color: #45d8ff;
+  }
+  66.666% {
+    color: #7f8cff;
+  }
+  83.333% {
+    color: #ff70c7;
+  }
+}
+
 .eyebrow {
   margin: 0 0 12px;
   color: var(--accent);
@@ -444,7 +465,8 @@ h1 em {
 
 .creator-credit a:hover,
 .creator-credit a:focus-visible {
-  color: var(--accent);
+  animation: footer-game-colors 2.4s steps(1, end) infinite;
+  text-shadow: 0 0 9px currentColor;
 }
 
 .results {
