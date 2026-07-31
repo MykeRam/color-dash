@@ -484,9 +484,12 @@ export default function Home() {
                 )
               ) : (
                 <>
-                  Think fast.
-                  <br />
-                  Tap the <em>match.</em>
+                  <span className="headline-line headline-think">
+                    Think fast.
+                  </span>
+                  <span className="headline-line headline-tap">
+                    Tap the <em className="headline-match">match.</em>
+                  </span>
                 </>
               )}
             </h1>
