@@ -149,6 +149,10 @@ button {
   margin: 16px 0 18px;
 }
 
+.hero-control {
+  position: relative;
+}
+
 .hero-orbits {
   position: relative;
   display: grid;
@@ -181,6 +185,29 @@ button {
 .hero-action:active {
   animation: none;
   transform: scale(0.96);
+}
+
+.start-cue {
+  position: absolute;
+  top: 40px;
+  left: calc(50% + 45px);
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  color: var(--game-cycle-color);
+  font-size: 0.58rem;
+  font-weight: 900;
+  letter-spacing: 0.13em;
+  line-height: 1;
+  pointer-events: none;
+  white-space: nowrap;
+}
+
+.start-cue b {
+  margin: 2px 0 0 -5px;
+  font-size: 1.45rem;
+  line-height: 1;
+  animation: cue-point 650ms ease-in-out infinite alternate;
 }
 
 .hero-orbits::before,
@@ -257,6 +284,16 @@ button {
 
   to {
     transform: translateY(-9px);
+  }
+}
+
+@keyframes cue-point {
+  from {
+    transform: translate(3px, 3px);
+  }
+
+  to {
+    transform: translate(-3px, -3px);
   }
 }
 
@@ -744,6 +781,16 @@ h1 em {
     width: 76px;
     height: 76px;
     margin-bottom: 10px;
+  }
+
+  .ready-screen .start-cue {
+    top: 25px;
+    left: calc(50% + 30px);
+    font-size: 0.48rem;
+  }
+
+  .ready-screen .start-cue b {
+    font-size: 1.1rem;
   }
 
   .ready-screen .hero-orbits::before {

@@ -312,19 +312,27 @@ export default function Home() {
               status === "over" ? "results-screen" : "ready-screen"
             }`}
           >
-            <button
-              className="hero-orbits hero-action"
-              onClick={
-                status === "over" ? () => setStatus("ready") : startGame
-              }
-              aria-label={
-                status === "over"
-                  ? "Return to the main screen"
-                  : "Start Color Dash"
-              }
-            >
-              {heroIcon}
-            </button>
+            <div className="hero-control">
+              <button
+                className="hero-orbits hero-action"
+                onClick={
+                  status === "over" ? () => setStatus("ready") : startGame
+                }
+                aria-label={
+                  status === "over"
+                    ? "Return to the main screen"
+                    : "Start Color Dash"
+                }
+              >
+                {heroIcon}
+              </button>
+              {status === "ready" && (
+                <div className="start-cue" aria-hidden="true">
+                  <span>START HERE</span>
+                  <b>↖</b>
+                </div>
+              )}
+            </div>
             {status === "over" && <p className="eyebrow">TIME’S UP</p>}
             <h1>
               {status === "over" ? (
