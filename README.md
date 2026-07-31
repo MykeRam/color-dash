@@ -25,6 +25,7 @@ Open `http://localhost:3000`.
 - Three lives per run
 - Increasing difficulty as the score rises
 - Best score saved locally in the browser
+- Global top-five leaderboard shared across every player
 - Responsive layouts for mobile and desktop
 
 ## Tech stack
@@ -34,6 +35,8 @@ Open `http://localhost:3000`.
 - **Next.js 16** — application framework and static site generation
 - **HTML and CSS** — responsive layout, animations, and touch-friendly controls
 - **Web Storage API** — device-local best score persistence
+- **Supabase Postgres and REST API** — shared leaderboard storage with Row Level
+  Security
 - **Node.js test runner** — production-render verification
 - **GitHub Actions and GitHub Pages** — automatic builds and public hosting from
   the `main` branch

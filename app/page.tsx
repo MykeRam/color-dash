@@ -8,6 +8,12 @@ type ColorOption = {
   ink: string;
 };
 
+type LeaderboardEntry = {
+  id: string;
+  player_name: string;
+  score: number;
+};
+
 const COLORS: ColorOption[] = [
   { name: "Flame", value: "#ff7657", ink: "#35120b" },
   { name: "Lemon", value: "#ffe45c", ink: "#302600" },
@@ -19,6 +25,17 @@ const COLORS: ColorOption[] = [
 
 const START_TIME = 3.5;
 const MIN_TIME = 1.15;
+const SUPABASE_URL = process.env.NEXT_PUBLIC_SUPABASE_URL;
+const SUPABASE_KEY = process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY;
+const LEADERBOARD_READY = Boolean(SUPABASE_URL && SUPABASE_KEY);
+
+function leaderboardHeaders() {
+  return {
+    apikey: SUPABASE_KEY ?? "",
+    Authorization: `Bearer ${SUPABASE_KEY ?? ""}`,
+    "Content-Type": "application/json",
+  };
+}
 
 function shuffle<T>(items: T[]) {
   const next = [...items];
@@ -40,6 +57,14 @@ export default function Home() {
   const [timeLeft, setTimeLeft] = useState(START_TIME);
   const [roundTime, setRoundTime] = useState(START_TIME);
   const [feedback, setFeedback] = useState<"idle" | "right" | "wrong">("idle");
+  const [leaderboard, setLeaderboard] = useState<LeaderboardEntry[]>([]);
+  const [leaderboardStatus, setLeaderboardStatus] = useState<
+    "loading" | "ready" | "error" | "unavailable"
+  >("loading");
+  const [playerName, setPlayerName] = useState("");
+  const [submitStatus, setSubmitStatus] = useState<
+    "idle" | "saving" | "saved" | "error"
+  >("idle");
   const deadlineRef = useRef(0);
   const scoreRef = useRef(0);
   const livesRef = useRef(3);
@@ -48,7 +73,36 @@ export default function Home() {
   useEffect(() => {
     const saved = Number(window.localStorage.getItem("color-dash-best") ?? 0);
     setBest(Number.isFinite(saved) ? saved : 0);
+    setPlayerName(window.localStorage.getItem("color-dash-player") ?? "");
   }, []);
+
+  const loadLeaderboard = useCallback(async () => {
+    if (!LEADERBOARD_READY) {
+      setLeaderboardStatus("unavailable");
+      return;
+    }
+
+    setLeaderboardStatus("loading");
+    try {
+      const response = await fetch(
+        `${SUPABASE_URL}/rest/v1/color_dash_scores?select=id,player_name,score&order=score.desc,created_at.asc&limit=5`,
+        {
+          headers: leaderboardHeaders(),
+          cache: "no-store",
+        },
+      );
+      if (!response.ok) throw new Error("Leaderboard request failed");
+      const entries = (await response.json()) as LeaderboardEntry[];
+      setLeaderboard(entries);
+      setLeaderboardStatus("ready");
+    } catch {
+      setLeaderboardStatus("error");
+    }
+  }, []);
+
+  useEffect(() => {
+    void loadLeaderboard();
+  }, [loadLeaderboard]);
 
   const endGame = useCallback(() => {
     setStatus("over");
@@ -115,8 +169,42 @@ export default function Home() {
     setStreak(0);
     setLives(3);
     setFeedback("idle");
+    setSubmitStatus("idle");
     setStatus("playing");
     createRound(0);
+  };
+
+  const saveScore = async (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    if (!LEADERBOARD_READY || score < 1 || submitStatus === "saving") return;
+
+    const cleanName = playerName.trim().replace(/\s+/g, " ").slice(0, 18);
+    if (!cleanName) {
+      setSubmitStatus("error");
+      return;
+    }
+
+    setSubmitStatus("saving");
+    try {
+      const response = await fetch(`${SUPABASE_URL}/rest/v1/color_dash_scores`, {
+        method: "POST",
+        headers: {
+          ...leaderboardHeaders(),
+          Prefer: "return=minimal",
+        },
+        body: JSON.stringify({
+          player_name: cleanName,
+          score,
+        }),
+      });
+      if (!response.ok) throw new Error("Score submission failed");
+      window.localStorage.setItem("color-dash-player", cleanName);
+      setPlayerName(cleanName);
+      setSubmitStatus("saved");
+      await loadLeaderboard();
+    } catch {
+      setSubmitStatus("error");
+    }
   };
 
   const chooseColor = (color: ColorOption) => {
@@ -219,7 +307,11 @@ export default function Home() {
             </div>
           </>
         ) : (
-          <div className="start-screen">
+          <div
+            className={`start-screen ${
+              status === "over" ? "results-screen" : "ready-screen"
+            }`}
+          >
             {status === "over" ? (
               <button
                 className="hero-orbits hero-home"
@@ -252,17 +344,99 @@ export default function Home() {
                 ? `You scored ${score}. Your next run starts slow, then speeds up fast.`
                 : "Match the glowing color before the bar runs out. Three misses and the run is over."}
             </p>
+            {status === "ready" && (
+              <section className="leaderboard" aria-labelledby="leaderboard-title">
+                <div className="leaderboard-heading">
+                  <span id="leaderboard-title">GLOBAL TOP 5</span>
+                  <span>LIVE</span>
+                </div>
+                {leaderboardStatus === "loading" && (
+                  <p className="leaderboard-message">Loading best scores…</p>
+                )}
+                {leaderboardStatus === "error" && (
+                  <button
+                    className="leaderboard-message leaderboard-retry"
+                    onClick={() => void loadLeaderboard()}
+                  >
+                    Couldn’t load scores · Tap to retry
+                  </button>
+                )}
+                {leaderboardStatus === "unavailable" && (
+                  <p className="leaderboard-message">Leaderboard coming soon</p>
+                )}
+                {leaderboardStatus === "ready" && leaderboard.length === 0 && (
+                  <p className="leaderboard-message">Be the first on the board.</p>
+                )}
+                {leaderboardStatus === "ready" && leaderboard.length > 0 && (
+                  <ol>
+                    {leaderboard.map((entry, index) => (
+                      <li key={entry.id}>
+                        <span className="leaderboard-rank">{index + 1}</span>
+                        <span className="leaderboard-name">{entry.player_name}</span>
+                        <strong>{entry.score}</strong>
+                      </li>
+                    ))}
+                  </ol>
+                )}
+              </section>
+            )}
             {status === "over" && (
-              <div className="results">
-                <div>
-                  <span>SCORE</span>
-                  <strong>{score}</strong>
+              <>
+                <div className="results">
+                  <div>
+                    <span>SCORE</span>
+                    <strong>{score}</strong>
+                  </div>
+                  <div>
+                    <span>BEST</span>
+                    <strong>{best}</strong>
+                  </div>
                 </div>
-                <div>
-                  <span>BEST</span>
-                  <strong>{best}</strong>
-                </div>
-              </div>
+                <form className="score-form" onSubmit={saveScore}>
+                  <label htmlFor="player-name">SAVE TO GLOBAL BOARD</label>
+                  <div>
+                    <input
+                      id="player-name"
+                      value={playerName}
+                      onChange={(event) => {
+                        setPlayerName(event.target.value);
+                        if (submitStatus === "error") setSubmitStatus("idle");
+                      }}
+                      maxLength={18}
+                      placeholder="Your name"
+                      autoComplete="nickname"
+                      disabled={submitStatus === "saved"}
+                    />
+                    <button
+                      type="submit"
+                      disabled={
+                        submitStatus === "saving" ||
+                        submitStatus === "saved" ||
+                        score < 1 ||
+                        !LEADERBOARD_READY
+                      }
+                    >
+                      {submitStatus === "saving"
+                        ? "SAVING…"
+                        : submitStatus === "saved"
+                          ? "SAVED ✓"
+                          : "SAVE"}
+                    </button>
+                  </div>
+                  <p
+                    className={submitStatus === "error" ? "score-error" : ""}
+                    role="status"
+                  >
+                    {submitStatus === "saved"
+                      ? "You’re on the global leaderboard."
+                      : submitStatus === "error"
+                        ? "Enter a name and try again."
+                        : score < 1
+                          ? "Score a point to join the board."
+                          : "Names are limited to 18 characters."}
+                  </p>
+                </form>
+              </>
             )}
             <button className="play-button" onClick={startGame}>
               <span>{status === "over" ? "PLAY AGAIN" : "START DASHING"}</span>
