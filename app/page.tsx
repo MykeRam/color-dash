@@ -339,8 +339,9 @@ export default function Home() {
   const canImprovePlayerBest = playerBest === null || score > playerBest;
   const nameIsBlocked =
     playerName.trim().length > 0 && hasBlockedName(playerName);
+  const globalBestEntry = leaderboard[0] ?? null;
   const globalBest =
-    leaderboard[0]?.score ?? (leaderboardStatus === "ready" ? 0 : null);
+    globalBestEntry?.score ?? (leaderboardStatus === "ready" ? 0 : null);
   const heroIcon = (
     <>
       <span />
@@ -383,7 +384,14 @@ export default function Home() {
           )}
           <div className="best-score" aria-live="polite">
             <span>GLOBAL BEST</span>
-            <strong>{globalBest ?? "—"}</strong>
+            <div className="best-score-leader">
+              <strong>{globalBest ?? "—"}</strong>
+              {globalBestEntry && (
+                <small title={globalBestEntry.player_name}>
+                  {globalBestEntry.player_name}
+                </small>
+              )}
+            </div>
           </div>
         </header>
 
