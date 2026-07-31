@@ -140,6 +140,14 @@ export default function Home() {
   };
 
   const progress = Math.max(0, Math.min(100, (timeLeft / roundTime) * 100));
+  const heroIcon = (
+    <>
+      <span />
+      <span />
+      <span />
+      <strong>GO!</strong>
+    </>
+  );
 
   return (
     <main className={`game-shell ${feedback}`}>
@@ -212,12 +220,19 @@ export default function Home() {
           </>
         ) : (
           <div className="start-screen">
-            <div className="hero-orbits" aria-hidden="true">
-              <span />
-              <span />
-              <span />
-              <strong>GO!</strong>
-            </div>
+            {status === "over" ? (
+              <button
+                className="hero-orbits hero-home"
+                onClick={() => setStatus("ready")}
+                aria-label="Return to the main screen"
+              >
+                {heroIcon}
+              </button>
+            ) : (
+              <div className="hero-orbits" aria-hidden="true">
+                {heroIcon}
+              </div>
+            )}
             <p className="eyebrow">{status === "over" ? "TIME’S UP" : "QUICK COLOR GAME"}</p>
             <h1>
               {status === "over" ? (

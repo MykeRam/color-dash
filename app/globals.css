@@ -146,9 +146,30 @@ button {
   height: 146px;
   margin-bottom: 32px;
   place-items: center;
+  padding: 0;
+  border: 0;
   border-radius: 50%;
   background: #102d48;
+  color: inherit;
+  font: inherit;
   box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.06);
+}
+
+.hero-home {
+  cursor: pointer;
+  transition: transform 140ms ease, box-shadow 140ms ease;
+}
+
+.hero-home:hover,
+.hero-home:focus-visible {
+  transform: translateY(-3px);
+  box-shadow:
+    inset 0 0 0 1px rgba(98, 233, 255, 0.25),
+    0 14px 34px rgba(0, 0, 0, 0.22);
+}
+
+.hero-home:active {
+  transform: scale(0.96);
 }
 
 .hero-orbits::before,
