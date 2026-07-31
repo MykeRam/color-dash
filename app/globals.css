@@ -232,7 +232,16 @@ button {
 .start-cue b {
   font-size: 1.45rem;
   line-height: 1;
-  animation: cue-point 650ms ease-in-out infinite alternate;
+  opacity: 0;
+  animation:
+    cue-arrow-in 360ms ease-out 3.22s both,
+    cue-point 650ms ease-in-out 3.58s infinite alternate;
+}
+
+.start-cue span {
+  display: block;
+  clip-path: inset(0 100% 0 0);
+  animation: cue-type 680ms steps(10, end) 2.5s both;
 }
 
 .hero-orbits::before,
@@ -336,6 +345,18 @@ button {
 
   to {
     transform: translateX(-3px);
+  }
+}
+
+@keyframes cue-type {
+  to {
+    clip-path: inset(0);
+  }
+}
+
+@keyframes cue-arrow-in {
+  to {
+    opacity: 1;
   }
 }
 
@@ -1000,10 +1021,16 @@ h1 em {
 
   .headline-think,
   .headline-tap,
-  .ready-screen .hero-orbits {
+  .ready-screen .hero-orbits,
+  .start-cue span {
     clip-path: none;
     opacity: 1;
     transform: none;
+    animation-delay: 0ms !important;
+  }
+
+  .start-cue b {
+    opacity: 1;
     animation-delay: 0ms !important;
   }
 }
