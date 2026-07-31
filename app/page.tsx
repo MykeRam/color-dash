@@ -43,7 +43,7 @@ export default function Home() {
   const deadlineRef = useRef(0);
   const scoreRef = useRef(0);
   const livesRef = useRef(3);
-  const feedbackTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const feedbackTimerRef = useRef<number | null>(null);
 
   useEffect(() => {
     const saved = Number(window.localStorage.getItem("color-dash-best") ?? 0);

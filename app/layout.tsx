@@ -17,8 +17,8 @@ export const metadata: Metadata = {
   description:
     "A fast, colorful browser game made for one-thumb play. Match the color before time runs out.",
   icons: {
-    icon: "/favicon.svg",
-    shortcut: "/favicon.svg",
+    icon: "./favicon.svg",
+    shortcut: "./favicon.svg",
   },
 };
 
