@@ -36,53 +36,24 @@ button {
   place-items: center;
   overflow: hidden;
   padding: 18px;
-  background:
-    linear-gradient(rgba(79, 219, 255, 0.075) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(79, 219, 255, 0.075) 1px, transparent 1px),
-    radial-gradient(circle at 50% -20%, rgba(69, 216, 255, 0.3), transparent 42%),
-    radial-gradient(circle at 50% 118%, rgba(255, 112, 199, 0.24), transparent 38%),
-    #06111f;
-  background-position: center;
-  background-size: 46px 46px, 46px 46px, auto, auto, auto;
+  background: #071523;
   touch-action: manipulation;
 }
 
 .game-shell::before {
   position: absolute;
-  top: 50%;
-  left: 50%;
-  width: min(1050px, 150vw);
-  height: min(1050px, 150vw);
-  border: 1px solid rgba(98, 233, 255, 0.08);
-  border-radius: 50%;
+  inset: 0;
+  background: radial-gradient(
+    circle at center,
+    rgba(255, 255, 255, 0.025),
+    transparent 55%
+  );
   content: "";
   pointer-events: none;
-  transform: translate(-50%, -50%);
-  box-shadow:
-    0 0 0 110px rgba(98, 233, 255, 0.018),
-    0 0 0 220px rgba(98, 233, 255, 0.012);
 }
 
 .ambient {
-  position: absolute;
-  width: 340px;
-  height: 340px;
-  border-radius: 50%;
-  filter: blur(85px);
-  opacity: 0.18;
-  pointer-events: none;
-}
-
-.ambient-one {
-  top: -190px;
-  left: calc(50% - 170px);
-  background: #21c7ff;
-}
-
-.ambient-two {
-  right: calc(50% - 170px);
-  bottom: -200px;
-  background: #ff4fa7;
+  display: none;
 }
 
 .game-card {
