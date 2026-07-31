@@ -57,6 +57,7 @@ button {
 }
 
 .game-card {
+  --game-cycle-color: #ff7657;
   position: relative;
   width: min(100%, 430px);
   min-height: min(760px, calc(100svh - 36px));
@@ -67,6 +68,7 @@ button {
   background: #0a1b2e;
   box-shadow: 0 30px 80px rgba(0, 0, 0, 0.42);
   backdrop-filter: blur(20px);
+  animation: game-colors 4.8s steps(1, end) infinite;
 }
 
 .topbar,
@@ -207,12 +209,11 @@ button {
   height: 58px;
   place-items: center;
   border-radius: 18px;
-  background: var(--accent);
+  background: var(--game-cycle-color);
   color: #062435;
   font-size: 1rem;
   transform: rotate(-7deg);
   box-shadow: 0 10px 30px rgba(98, 233, 255, 0.26);
-  animation: game-colors 4.8s steps(1, end) infinite;
 }
 
 .hero-orbits span {
@@ -250,43 +251,22 @@ button {
 
 @keyframes game-colors {
   0% {
-    background: #ff7657;
+    --game-cycle-color: #ff7657;
   }
   16.666% {
-    background: #ffe45c;
+    --game-cycle-color: #ffe45c;
   }
   33.333% {
-    background: #4ee6a8;
+    --game-cycle-color: #4ee6a8;
   }
   50% {
-    background: #45d8ff;
+    --game-cycle-color: #45d8ff;
   }
   66.666% {
-    background: #7f8cff;
+    --game-cycle-color: #7f8cff;
   }
   83.333% {
-    background: #ff70c7;
-  }
-}
-
-@keyframes footer-game-colors {
-  0% {
-    color: #ff7657;
-  }
-  16.666% {
-    color: #ffe45c;
-  }
-  33.333% {
-    color: #4ee6a8;
-  }
-  50% {
-    color: #45d8ff;
-  }
-  66.666% {
-    color: #7f8cff;
-  }
-  83.333% {
-    color: #ff70c7;
+    --game-cycle-color: #ff70c7;
   }
 }
 
@@ -465,7 +445,7 @@ h1 em {
 
 .creator-credit a:hover,
 .creator-credit a:focus-visible {
-  animation: footer-game-colors 2.4s steps(1, end) infinite;
+  color: var(--game-cycle-color);
   text-shadow: 0 0 9px currentColor;
 }
 
