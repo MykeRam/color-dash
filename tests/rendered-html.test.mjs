@@ -29,6 +29,10 @@ test("server-renders the Color Dash start screen", async () => {
 
   const html = await response.text();
   assert.match(html, /<title>Color Dash/);
+  assert.match(
+    html,
+    /<meta[^>]+name="theme-color"[^>]+content="#0a1b2e"/i,
+  );
   assert.match(html, /COLOR DASH/);
   assert.match(html, /Think fast/);
   assert.match(html, /GLOBAL TOP 5/);
