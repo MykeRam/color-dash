@@ -312,19 +312,19 @@ export default function Home() {
               status === "over" ? "results-screen" : "ready-screen"
             }`}
           >
-            {status === "over" ? (
-              <button
-                className="hero-orbits hero-home"
-                onClick={() => setStatus("ready")}
-                aria-label="Return to the main screen"
-              >
-                {heroIcon}
-              </button>
-            ) : (
-              <div className="hero-orbits" aria-hidden="true">
-                {heroIcon}
-              </div>
-            )}
+            <button
+              className="hero-orbits hero-action"
+              onClick={
+                status === "over" ? () => setStatus("ready") : startGame
+              }
+              aria-label={
+                status === "over"
+                  ? "Return to the main screen"
+                  : "Start Color Dash"
+              }
+            >
+              {heroIcon}
+            </button>
             {status === "over" && <p className="eyebrow">TIME’S UP</p>}
             <h1>
               {status === "over" ? (
@@ -437,11 +437,17 @@ export default function Home() {
                 </form>
               </>
             )}
-            <button className="play-button" onClick={startGame}>
-              <span>{status === "over" ? "PLAY AGAIN" : "START DASHING"}</span>
-              <b aria-hidden="true">→</b>
-            </button>
-            <p className="hint">Tap with one thumb · No sign-in needed</p>
+            {status === "over" && (
+              <button className="play-button" onClick={startGame}>
+                <span>PLAY AGAIN</span>
+                <b aria-hidden="true">→</b>
+              </button>
+            )}
+            <p className="hint">
+              {status === "ready"
+                ? "Tap GO to start · One thumb · No sign-in needed"
+                : "Tap GO for home · No sign-in needed"}
+            </p>
           </div>
         )}
         <footer className="creator-credit">

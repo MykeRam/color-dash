@@ -165,20 +165,20 @@ button {
   box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.06);
 }
 
-.hero-home {
+.hero-action {
   cursor: pointer;
   transition: transform 140ms ease, box-shadow 140ms ease;
 }
 
-.hero-home:hover,
-.hero-home:focus-visible {
+.hero-action:hover,
+.hero-action:focus-visible {
   transform: translateY(-3px);
   box-shadow:
     inset 0 0 0 1px rgba(98, 233, 255, 0.25),
     0 14px 34px rgba(0, 0, 0, 0.22);
 }
 
-.hero-home:active {
+.hero-action:active {
   transform: scale(0.96);
 }
 
@@ -789,10 +789,6 @@ h1 em {
 
   .leaderboard li {
     min-height: 19px;
-  }
-
-  .ready-screen .play-button {
-    min-height: 54px;
   }
 
   .hud {
