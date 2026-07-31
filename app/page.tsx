@@ -325,7 +325,7 @@ export default function Home() {
                 {heroIcon}
               </div>
             )}
-            <p className="eyebrow">{status === "over" ? "TIME’S UP" : "QUICK COLOR GAME"}</p>
+            {status === "over" && <p className="eyebrow">TIME’S UP</p>}
             <h1>
               {status === "over" ? (
                 <>
