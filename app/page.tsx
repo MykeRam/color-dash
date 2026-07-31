@@ -407,8 +407,8 @@ export default function Home() {
               </button>
               {status === "ready" && (
                 <div className="start-cue" aria-hidden="true">
+                  <b>←</b>
                   <span>START HERE</span>
-                  <b>↖</b>
                 </div>
               )}
             </div>

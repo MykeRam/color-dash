@@ -177,11 +177,11 @@ button {
 
 .start-cue {
   position: absolute;
-  top: 40px;
+  top: 43px;
   left: calc(50% + 64px);
   display: flex;
-  flex-direction: column;
-  align-items: flex-start;
+  align-items: center;
+  gap: 8px;
   color: #fff;
   font-size: 0.58rem;
   font-weight: 900;
@@ -192,7 +192,6 @@ button {
 }
 
 .start-cue b {
-  margin: 10px 0 0 -5px;
   font-size: 1.45rem;
   line-height: 1;
   animation: cue-point 650ms ease-in-out infinite alternate;
@@ -277,11 +276,11 @@ button {
 
 @keyframes cue-point {
   from {
-    transform: translate(3px, 3px);
+    transform: translateX(3px);
   }
 
   to {
-    transform: translate(-3px, -3px);
+    transform: translateX(-3px);
   }
 }
 
@@ -768,7 +767,7 @@ h1 em {
   }
 
   .ready-screen .start-cue {
-    top: 25px;
+    top: 27px;
     left: calc(50% + 43px);
     font-size: 0.48rem;
   }
